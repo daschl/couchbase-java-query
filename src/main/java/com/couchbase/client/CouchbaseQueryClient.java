@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class CouchbaseQueryClient extends CouchbaseClientProxy {
 
@@ -46,7 +47,11 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
   private List<URI> parseCouchbaseNodes(List<String> nodes) {
     List<URI> parsed = new ArrayList<URI>();
     for (String node : nodes) {
-
+      try {
+        parsed.add(new URI("http://" + node + ":8091/pools"));
+      } catch (Exception ex) {
+        throw new IllegalArgumentException("Illegal node string found.", ex);
+      }
     }
     return parsed;
   }
@@ -56,8 +61,15 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
   }
 
   public Object query(String query) {
-    //return asyncQuery(query).get();
-    return null;
+    HttpFuture<Object> future = asyncQuery(query);
+
+    try {
+      return asyncQuery(query).get();
+    } catch (ExecutionException ex) {
+      throw new RuntimeException("Got exception while waiting on query", ex);
+    } catch (InterruptedException ex) {
+      throw new RuntimeException("Got exception while waiting on query", ex);
+    }
   }
 
   /**

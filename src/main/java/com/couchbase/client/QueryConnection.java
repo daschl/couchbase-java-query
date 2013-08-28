@@ -97,8 +97,8 @@ public class QueryConnection extends SpyObject {
     try {
       latch.await();
     } catch (InterruptedException e) {
-      e.printStackTrace();
-      // cancel op here => interrupted while waiting for write complete.
+      getLogger().warn("Got interrupted while writing Query, cancelling operation.");
+      future.cancel(true);
     }
 
     return future;

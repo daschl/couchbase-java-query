@@ -17,17 +17,6 @@ public class QueryConnectionIntegrationTest {
     nodes.add("127.0.0.1");
   }
 
-  //@Test
-  public void foo() throws Exception {
-    QueryConnection connection = new QueryConnection(nodes);
-    for (int i = 1; i < 100; i++) {
-      System.out.println("Iteration " + i);
-      HttpFuture<Object> future = connection.execute("SELECT * FROM default LIMIT " + i);
-      System.out.println(future.get());
-    }
-    connection.shutdown();
-  }
-
   @Test
   public void benchmarkOneThreadSyncPerformance() throws Exception {
     QueryConnection connection = new QueryConnection(nodes);
@@ -39,8 +28,9 @@ public class QueryConnectionIntegrationTest {
     }
     final long end = System.nanoTime();
 
-    System.out.println(iterations + " iterations took: " + (end - start) / 1000000 + " milliseconds");
-    System.out.println("That is ")
+    final long difference = (end - start) / 1000000;
+    System.out.println("One Thread Sync: " + iterations + " iterations took: " + difference + " milliseconds");
+    System.out.println("That is " + (difference / iterations) * 1000 + "calls per second");
     connection.shutdown();
   }
 
