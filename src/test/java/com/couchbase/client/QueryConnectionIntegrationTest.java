@@ -1,6 +1,7 @@
 package com.couchbase.client;
 
 import com.couchbase.client.internal.HttpFuture;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class QueryConnectionIntegrationTest {
   @Test
   public void benchmarkOneThreadSyncPerformance() throws Exception {
     QueryConnection connection = new QueryConnection(nodes);
-    final int iterations = 10000;
+    final int iterations = 1000;
     final long start = System.nanoTime();
     for (int i = 0; i < iterations; i++) {
       HttpFuture<Object> future = connection.execute("SELECT * FROM default LIMIT " + i);
@@ -39,6 +40,7 @@ public class QueryConnectionIntegrationTest {
     final long end = System.nanoTime();
 
     System.out.println(iterations + " iterations took: " + (end - start) / 1000000 + " milliseconds");
+    System.out.println("That is ")
     connection.shutdown();
   }
 

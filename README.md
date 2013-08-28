@@ -7,7 +7,8 @@ Introduction
 This is a highly experimental extension to the Couchbase Java Client, which enables the possibility of running
 N1QL queries against a Couchbase cluster.
 
-You need [tuqtng](https://github.com/couchbaselabs/tuqtng) running. Don't know what that is? Move on for now.
+You need [tuqtng](https://github.com/couchbaselabs/tuqtng) running on port 8093. Don't know what that is? Move on
+for now.
 
 Usage
 -----
