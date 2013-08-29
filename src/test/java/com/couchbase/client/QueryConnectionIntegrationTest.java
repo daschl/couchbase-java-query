@@ -2,6 +2,7 @@ package com.couchbase.client;
 
 import com.couchbase.client.internal.HttpFuture;
 
+import com.couchbase.client.mapping.QueryResult;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,14 +24,14 @@ public class QueryConnectionIntegrationTest {
     final int iterations = 1000;
     final long start = System.nanoTime();
     for (int i = 0; i < iterations; i++) {
-      HttpFuture<Object> future = connection.execute("SELECT * FROM default LIMIT " + i);
+      HttpFuture<QueryResult> future = connection.execute("SELECT * FROM default LIMIT " + i);
       future.get();
     }
     final long end = System.nanoTime();
 
     final long difference = (end - start) / 1000000;
     System.out.println("One Thread Sync: " + iterations + " iterations took: " + difference + " milliseconds");
-    System.out.println("That is " + (difference / iterations) * 1000 + "calls per second");
+    System.out.println("That is " + (iterations / difference) * 1000 + "calls per second");
     connection.shutdown();
   }
 

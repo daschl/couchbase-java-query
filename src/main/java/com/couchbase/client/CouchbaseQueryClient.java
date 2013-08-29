@@ -1,6 +1,7 @@
 package com.couchbase.client;
 
 import com.couchbase.client.internal.HttpFuture;
+import com.couchbase.client.mapping.QueryResult;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -56,19 +57,19 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
     return parsed;
   }
 
-  public HttpFuture<Object> asyncQuery(String query) {
+  public HttpFuture<QueryResult> asyncQuery(String query) {
     return queryConnection.execute(query);
   }
 
-  public Object query(String query) {
-    HttpFuture<Object> future = asyncQuery(query);
+  public QueryResult query(String query) {
+    HttpFuture<QueryResult> future = asyncQuery(query);
 
     try {
       return asyncQuery(query).get();
     } catch (ExecutionException ex) {
-      throw new RuntimeException("Got exception while waiting on query", ex);
+      throw new RuntimeException("Got exception while waiting on io", ex);
     } catch (InterruptedException ex) {
-      throw new RuntimeException("Got exception while waiting on query", ex);
+      throw new RuntimeException("Got exception while waiting on io", ex);
     }
   }
 

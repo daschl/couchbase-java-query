@@ -1,8 +1,9 @@
 package com.couchbase.client;
 
 import com.couchbase.client.internal.HttpFuture;
-import com.couchbase.client.query.QueryInitializer;
-import com.couchbase.client.query.QueryEvent;
+import com.couchbase.client.io.QueryInitializer;
+import com.couchbase.client.io.QueryEvent;
+import com.couchbase.client.mapping.QueryResult;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class QueryConnection extends SpyObject {
 
   /**
-   * Current default query port of the engine.
+   * Current default io port of the engine.
    */
   public static final int QUERY_PORT = 8093;
 
@@ -74,18 +75,18 @@ public class QueryConnection extends SpyObject {
     }
 
     if (connectedChannels.size() == 0) {
-      throw new BootstrapException("Could not connect to at least one query node, stopping bootstrap.");
+      throw new BootstrapException("Could not connect to at least one io node, stopping bootstrap.");
     }
   }
 
-  public HttpFuture<Object> execute(String query) {
+  public HttpFuture<QueryResult> execute(String query) {
     Channel chan = connectedChannels.get(0); // always use first channel for now
 
 
     CountDownLatch futureLatch = new CountDownLatch(1);
-    HttpFuture<Object> future = new HttpFuture<Object>(futureLatch, 10000);
+    HttpFuture<QueryResult> future = new HttpFuture<QueryResult>(futureLatch, 10000);
 
-    ChannelFuture channelFuture = chan.write(new QueryEvent(query, future, futureLatch));
+    ChannelFuture channelFuture = chan.writeAndFlush(new QueryEvent<QueryResult>(query, future, futureLatch));
 
     final CountDownLatch latch = new CountDownLatch(1);
     channelFuture.addListener(new ChannelFutureListener() {

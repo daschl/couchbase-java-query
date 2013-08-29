@@ -1,16 +1,16 @@
-package com.couchbase.client.query;
+package com.couchbase.client.io;
 
 import com.couchbase.client.internal.HttpFuture;
 
 import java.util.concurrent.CountDownLatch;
 
-public final class QueryEvent {
+public final class QueryEvent<T> {
 
   private final String query;
-  private final HttpFuture<Object> future;
+  private final HttpFuture<T> future;
   private final CountDownLatch latch;
 
-  public QueryEvent(String query, HttpFuture<Object> future, CountDownLatch latch) {
+  public QueryEvent(String query, HttpFuture<T> future, CountDownLatch latch) {
     this.query = query;
     this.future = future;
     this.latch = latch;
@@ -20,7 +20,7 @@ public final class QueryEvent {
     return query;
   }
 
-  public HttpFuture<Object> getFuture() {
+  public HttpFuture<T> getFuture() {
     return future;
   }
 

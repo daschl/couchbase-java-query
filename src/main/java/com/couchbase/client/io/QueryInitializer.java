@@ -1,4 +1,4 @@
-package com.couchbase.client.query;
+package com.couchbase.client.io;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;

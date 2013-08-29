@@ -1,4 +1,4 @@
-package com.couchbase.client.query;
+package com.couchbase.client.io;
 
 import io.netty.channel.CombinedChannelDuplexHandler;
 
@@ -6,7 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 
-public class QueryCodec extends CombinedChannelDuplexHandler<QueryDecoder, QueryEncoder> {
+public final class QueryCodec extends CombinedChannelDuplexHandler<QueryDecoder, QueryEncoder> {
 
   private Queue<QueryEvent> queue = new ArrayDeque<QueryEvent>();
 

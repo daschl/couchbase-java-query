@@ -1,5 +1,6 @@
-package com.couchbase.client.query;
+package com.couchbase.client.io;
 
+import com.couchbase.client.mapping.QueryResult;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.HttpContent;
@@ -14,7 +15,7 @@ import java.util.Queue;
 public class QueryDecoder extends SimpleChannelInboundHandler<HttpObject> {
 
   private final Queue<QueryEvent> queue;
-  private QueryEvent nextEvent;
+  private QueryEvent currentEvent;
 
   public QueryDecoder(Queue<QueryEvent> queue) {
     this.queue = queue;
@@ -23,13 +24,17 @@ public class QueryDecoder extends SimpleChannelInboundHandler<HttpObject> {
   @Override
   protected void channelRead0(ChannelHandlerContext ctx, HttpObject msg) throws Exception {
     if (msg instanceof HttpResponse) {
+      currentEvent = queue.poll();
       HttpResponse response = (HttpResponse) msg;
-      nextEvent = queue.poll();
+
     }
     if (msg instanceof HttpContent) {
       HttpContent content = (HttpContent) msg;
-      nextEvent.getFuture().set(content.content().toString(CharsetUtil.UTF_8), new OperationStatus(true, "200!"));
-      nextEvent.getLatch().countDown();
+
+      QueryResult queryResult = new QueryResult();
+      queryResult.resultSet = content.content().toString(CharsetUtil.UTF_8);
+      currentEvent.getFuture().set(queryResult, new OperationStatus(true, "200!"));
+      currentEvent.getLatch().countDown();
     }
   }
 
