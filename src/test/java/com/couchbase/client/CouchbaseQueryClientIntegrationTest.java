@@ -75,4 +75,15 @@ public class CouchbaseQueryClientIntegrationTest {
     client.shutdown();
   }
 
+  @Test
+  public void shouldPreprocessBucketName() {
+    CouchbaseQueryClient client = new CouchbaseQueryClient(nodes, nodes, "beer-sample", "");
+    QueryResult query = client.query("SELECT * FROM {bucket} LIMIT 1");
+
+    assertTrue(query.isSuccess());
+    assertEquals(1, query.getResult().size());
+
+    client.shutdown();
+  }
+
 }

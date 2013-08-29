@@ -56,6 +56,11 @@ also more information transferred with the query, the API will be extended to ma
 If you want to work with the future, use the `asyncQuery(String)` method as before. This returns a `HttpFuture` on which
 you can react.
 
+Finally, you can use the `{bucket}` key in your query to let it automatically replace it with the bucket connected. So,
+the query `SELECT * FROM {bucket}` will be translated into `SELECT * FROM beer-sample` if you are connected to the
+`beer-sample` bucket. That way, you can abstract the query from the actual containing bucket and reuse the query across
+more buckets (testing, production...).
+
 Todo
 ----
 Before a 1.0 milestone is reached, the following things need to be implemented (informal list):

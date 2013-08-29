@@ -36,6 +36,7 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
 
   private final CouchbaseClient couchbaseClient;
   private final QueryConnection queryConnection;
+  private final String bucketName;
 
   /**
    * Create a new {@link CouchbaseQueryClient} with default settings.
@@ -83,6 +84,8 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
     } catch (Exception ex) {
       throw new BootstrapException("Could not bootstrap the QueryClient: " + ex);
     }
+
+    bucketName = bucket;
   }
 
   private List<URI> parseCouchbaseNodes(List<String> nodes) {
@@ -98,7 +101,7 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
   }
 
   public HttpFuture<QueryResult> asyncQuery(String query) {
-    return queryConnection.execute(query);
+    return queryConnection.execute(preprocessQuery(query));
   }
 
   public QueryResult query(String query) {
@@ -139,4 +142,15 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
     queryConnection.shutdown();
     return true;
   }
+
+  /**
+   * Preprocess the Query and replace supported tokens.
+   *
+   * @param original the original query string.
+   * @return the processed query string.
+   */
+  private String preprocessQuery(String original) {
+    return original.replaceAll("\\{bucket\\}", bucketName);
+  }
+
 }
