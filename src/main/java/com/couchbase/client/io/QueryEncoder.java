@@ -32,7 +32,7 @@ public class QueryEncoder extends MessageToMessageEncoder<QueryEvent> {
     HttpRequest request = new DefaultFullHttpRequest(
       HttpVersion.HTTP_1_1,
       HttpMethod.POST,
-      "/io",
+      "/query",
       queryBuf
     );
 

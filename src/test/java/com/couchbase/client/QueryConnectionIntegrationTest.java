@@ -25,7 +25,7 @@ public class QueryConnectionIntegrationTest {
     final long start = System.nanoTime();
     for (int i = 0; i < iterations; i++) {
       HttpFuture<QueryResult> future = connection.execute("SELECT * FROM default LIMIT " + i);
-      future.get();
+      System.out.println(future.get().resultSet);
     }
     final long end = System.nanoTime();
 
