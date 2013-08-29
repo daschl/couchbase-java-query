@@ -8,8 +8,8 @@ import io.netty.handler.codec.http.DefaultFullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
+import io.netty.util.CharsetUtil;
 
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Queue;
 
@@ -21,14 +21,10 @@ public class QueryEncoder extends MessageToMessageEncoder<QueryEvent> {
   public QueryEncoder(Queue<QueryEvent> queue) {
     this.queue = queue;
   }
-  /**
-   * The Charset to use for encoding.
-   */
-  private final Charset defaultCharset = Charset.forName("UTF-8");
 
   @Override
   protected void encode(ChannelHandlerContext ctx, QueryEvent ev, List<Object> out) throws Exception {
-    ByteBuf queryBuf = Unpooled.copiedBuffer(ev.getQuery(), defaultCharset);
+    ByteBuf queryBuf = Unpooled.copiedBuffer(ev.getQuery(), CharsetUtil.UTF_8);
     HttpRequest request = new DefaultFullHttpRequest(
       HttpVersion.HTTP_1_1,
       HttpMethod.POST,

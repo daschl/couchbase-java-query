@@ -21,17 +21,16 @@ public class QueryConnectionIntegrationTest {
   @Test
   public void benchmarkOneThreadSyncPerformance() throws Exception {
     QueryConnection connection = new QueryConnection(nodes);
-    final int iterations = 1000;
+    final int iterations = 100;
     final long start = System.nanoTime();
     for (int i = 0; i < iterations; i++) {
-      HttpFuture<QueryResult> future = connection.execute("SELECT * FROM default LIMIT " + i);
-      System.out.println(future.get().resultSet);
+      HttpFuture<QueryResult> future = connection.execute("SELECT * FROM beer-sample LIMIT 3");
+      System.out.println(future.get().isSuccess());
     }
     final long end = System.nanoTime();
 
     final long difference = (end - start) / 1000000;
     System.out.println("One Thread Sync: " + iterations + " iterations took: " + difference + " milliseconds");
-    System.out.println("That is " + (iterations / difference) * 1000 + "calls per second");
     connection.shutdown();
   }
 
