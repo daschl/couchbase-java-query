@@ -16,3 +16,15 @@ Instantiate the `CouchbaseQueryClient` similar to a regular `CouchbaseClient`, b
 ip addresses of the nodes. The client here proxies all regular operations through and provides a few new methods.
 
 More examples soon here, look through the tests if you are curious.
+
+Todo
+----
+Before a 1.0 milestone is reached, the following things need to be implemented (informal list):
+- Testing and Handling of errors (socket closes, 500ers, 404ers,...)
+- Full API documentation
+- Overhaul this README with examples and usages
+- Unit-Tests of the netty codec
+- Unit-Tests of the mapping POJOs
+- Test the correct proxying of methods
+- make unit test env more flexible (variable host,...)
+- maybe also add a streaming api for responses once the other stuff is done and reasonably stable.
