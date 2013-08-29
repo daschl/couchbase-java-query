@@ -1,3 +1,25 @@
+/**
+ * Copyright (C) 2013 Couchbase, Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALING
+ * IN THE SOFTWARE.
+ */
+
 package com.couchbase.client;
 
 import com.couchbase.client.internal.HttpFuture;
@@ -21,6 +43,8 @@ import java.util.concurrent.TimeUnit;
 abstract class CouchbaseClientProxy extends SpyObject implements CouchbaseClientIF {
 
   abstract CouchbaseClient getCouchbaseClient();
+  public abstract void shutdown();
+  public abstract boolean shutdown(long timeout, TimeUnit unit);
 
   @Override
   public Future<CASValue<Object>> asyncGetAndLock(String key, int exp) {
@@ -39,32 +63,32 @@ abstract class CouchbaseClientProxy extends SpyObject implements CouchbaseClient
 
   @Override
   public CASValue<Object> getAndLock(String key, int exp) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().getAndLock(key, exp);
   }
 
   @Override
   public <T> OperationFuture<Boolean> asyncUnlock(String key, long casId, Transcoder<T> tc) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().asyncUnlock(key, casId, tc);
   }
 
   @Override
   public OperationFuture<Boolean> asyncUnlock(String key, long casId) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().asyncUnlock(key,casId);
   }
 
   @Override
   public <T> Boolean unlock(String key, long casId, Transcoder<T> tc) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().unlock(key, casId, tc);
   }
 
   @Override
   public Boolean unlock(String key, long casId) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().unlock(key, casId);
   }
 
   @Override
   public Map<MemcachedNode, ObserveResponse> observe(String key, long cas) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().observe(key, cas);
   }
 
   @Override
@@ -670,16 +694,6 @@ abstract class CouchbaseClientProxy extends SpyObject implements CouchbaseClient
   @Override
   public Future<Boolean> flush() {
     return null;  //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  @Override
-  public void shutdown() {
-    //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  @Override
-  public boolean shutdown(long timeout, TimeUnit unit) {
-    return false;  //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override

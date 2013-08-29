@@ -22,18 +22,26 @@
 
 package com.couchbase.client;
 
-import com.couchbase.client.internal.HttpFuture;
-
 import com.couchbase.client.mapping.QueryResult;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class QueryConnectionIntegrationTest {
+/**
+ * Created with IntelliJ IDEA.
+ * User: michael
+ * Date: 8/29/13
+ * Time: 11:20 AM
+ * To change this template use File | Settings | File Templates.
+ */
+public class CouchbaseQueryClientIntegrationTest {
 
   List<String> nodes = new ArrayList<String>();
 
@@ -43,19 +51,35 @@ public class QueryConnectionIntegrationTest {
   }
 
   @Test
-  public void benchmarkOneThreadSyncPerformance() throws Exception {
-    QueryConnection connection = new QueryConnection(nodes);
-    final int iterations = 1000;
-    final long start = System.nanoTime();
-    for (int i = 0; i < iterations; i++) {
-      HttpFuture<QueryResult> future = connection.execute("SELECT * FROM beer-sample LIMIT 3");
-      assertTrue(future.get().isSuccess());
-    }
-    final long end = System.nanoTime();
+  public void shouldBootstrap() {
+    CouchbaseQueryClient client = new CouchbaseQueryClient(nodes, nodes, "beer-sample", "");
+    QueryResult query = client.query("SELECT * FROM beer-sample LIMIT 1");
 
-    final long difference = (end - start) / 1000000;
-    System.out.println("One Thread Sync: " + iterations + " iterations took: " + difference + " milliseconds");
-    connection.shutdown();
+    assertTrue(query.isSuccess());
+
+    client.shutdown();
+  }
+
+  @Test(expected = BootstrapException.class)
+  public void shouldThrowOnUnknownHost() {
+    new CouchbaseQueryClient(Arrays.asList("unknownHostname"), "default", "");
+  }
+
+  @Test(expected = BootstrapException.class)
+  public void shouldThrowOnEmptyHost() {
+    new CouchbaseQueryClient(Arrays.asList(""), "default", "");
+  }
+
+  @Test
+  public void shouldWorkWithInvalidQuery() {
+    CouchbaseQueryClient client = new CouchbaseQueryClient(nodes, nodes, "beer-sample", "");
+    QueryResult query = client.query("SELECT * FROM beer-sample LIMI 1");
+
+    assertFalse(query.isSuccess());
+    assertEquals(4100, query.getCause().getCode());
+    assertEquals("Parse Error", query.getCause().getMessage());
+
+    client.shutdown();
   }
 
 }
