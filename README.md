@@ -53,6 +53,9 @@ client.shutdown();
 The enclosed `QueryRows` are basically `HashMap`s, so you can iterate and access them with a familiar pattern. There is
 also more information transferred with the query, the API will be extended to make use for it in a type-safe manner.
 
+If you want to work with the future, use the `asyncQuery(String)` method as before. This returns a `HttpFuture` on which
+you can react.
+
 Todo
 ----
 Before a 1.0 milestone is reached, the following things need to be implemented (informal list):
@@ -64,3 +67,4 @@ Before a 1.0 milestone is reached, the following things need to be implemented (
 - make unit test env more flexible (variable host,...)
 - maybe also add a streaming api for responses once the other stuff is done and reasonably stable.
 - Provide a building mechanism to customize settings and also use a factory for the couchbase client.
+- Upgrade to 1.2 once released so we can use the callbacks and add metrics.
