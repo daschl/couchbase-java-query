@@ -26,10 +26,26 @@ import com.couchbase.client.internal.HttpFuture;
 
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * Contains every information that belongs to a certain event.
+ *
+ * @param <T> type of the future containment.
+ */
 public final class QueryEvent<T> {
 
+  /**
+   * Contains the original query string.
+   */
   private final String query;
+
+  /**
+   * The future to complete.
+   */
   private final HttpFuture<T> future;
+
+  /**
+   * The latch to count down when done.
+   */
   private final CountDownLatch latch;
 
   public QueryEvent(String query, HttpFuture<T> future, CountDownLatch latch) {

@@ -27,11 +27,23 @@ import io.netty.channel.CombinedChannelDuplexHandler;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-
+/**
+ * The {@link QueryCodec} provides encoding and decoding of Queries.
+ *
+ * The purpose of the codec is to enable both the {@link QueryEncoder} and the
+ * {@link QueryDecoder} at the same time and providing a Queue through which both
+ * share request/response events.
+ */
 public final class QueryCodec extends CombinedChannelDuplexHandler<QueryDecoder, QueryEncoder> {
 
+  /**
+   * Contains a queue of {@link QueryEvent}s to be processed.
+   */
   private Queue<QueryEvent> queue = new ArrayDeque<QueryEvent>();
 
+  /**
+   * Create a new {@link QueryCodec}.
+   */
   public QueryCodec() {
     init(new QueryDecoder(queue), new QueryEncoder(queue));
   }

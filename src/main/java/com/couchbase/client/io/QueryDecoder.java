@@ -33,9 +33,16 @@ import io.netty.handler.codec.http.LastHttpContent;
 import io.netty.util.CharsetUtil;
 import net.spy.memcached.ops.OperationStatus;
 
-import java.util.*;
+import java.util.Queue;
 
-
+/**
+ * Decode incoming {@link HttpObject}s and complete
+ * {@link com.couchbase.client.internal.HttpFuture}s.
+ *
+ * Every response that arrives from the server, comes into this decoder.
+ * Once the HTTP header is received, a new operation is picked from the queue and the
+ * JSON response is parsed. Finally, the future is completed.
+ */
 public class QueryDecoder extends SimpleChannelInboundHandler<HttpObject> {
 
   /**
@@ -52,7 +59,6 @@ public class QueryDecoder extends SimpleChannelInboundHandler<HttpObject> {
    * Contains the current operation status for the event.
    */
   private OperationStatus currentStatus;
-
 
   /**
    * Contains the current chunks to parse.
@@ -101,17 +107,31 @@ public class QueryDecoder extends SimpleChannelInboundHandler<HttpObject> {
     }
   }
 
+  /**
+   * Wrapper method to set the status only if it wasn't set before.
+   *
+   * @param success success or not.
+   * @param msg the message to add.
+   */
   private void setCurrentEventStatus(boolean success, String msg) {
     if (currentStatus == null) {
       currentStatus = new OperationStatus(success, msg);
     }
   }
 
+  /**
+   * Reset certain variables to their "fresh" state.
+   */
   private void clearForNextEvent() {
     currentStatus = null;
     contentBuffer.setLength(0);
   }
 
+  /**
+   * Decode the raw JSON string into a {@link QueryResult}.
+   *
+   * @return the parsed result.
+   */
   private QueryResult decodeContentBuffer() {
     QueryResult result = null;
     try {
@@ -122,6 +142,12 @@ public class QueryDecoder extends SimpleChannelInboundHandler<HttpObject> {
     return result;
   }
 
+  /**
+   * Handle exceptions.
+   *
+   * @param ctx handler context.
+   * @param cause cause of exception.
+   */
   @Override
   public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
     cause.printStackTrace();

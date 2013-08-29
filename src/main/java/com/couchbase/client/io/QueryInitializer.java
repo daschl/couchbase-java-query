@@ -26,7 +26,9 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpClientCodec;
 
-
+/**
+ * Initialize the netty pipeline with the codecs.
+ */
 public class QueryInitializer extends ChannelInitializer<SocketChannel> {
 
   @Override

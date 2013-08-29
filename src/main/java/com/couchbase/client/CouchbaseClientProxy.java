@@ -93,42 +93,42 @@ abstract class CouchbaseClientProxy extends SpyObject implements CouchbaseClient
 
   @Override
   public void observePoll(String key, long cas, PersistTo persist, ReplicateTo replicate, boolean isDelete) {
-    //To change body of implemented methods use File | Settings | File Templates.
+    getCouchbaseClient().observePoll(key, cas, persist, replicate, isDelete);
   }
 
   @Override
   public OperationFuture<Boolean> set(String key, Object value) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().set(key, value);
   }
 
   @Override
   public OperationFuture<Boolean> set(String key, int exp, Object value, PersistTo persist) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().set(key, exp, value, persist);
   }
 
   @Override
   public OperationFuture<Boolean> set(String key, Object value, PersistTo persist) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().set(key, value, persist);
   }
 
   @Override
   public OperationFuture<Boolean> set(String key, int exp, Object value, ReplicateTo replicate) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().set(key, exp, value, replicate);
   }
 
   @Override
   public OperationFuture<Boolean> set(String key, Object value, ReplicateTo replicate) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().set(key, value, replicate);
   }
 
   @Override
   public OperationFuture<Boolean> set(String key, int exp, Object value, PersistTo persist, ReplicateTo replicate) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().set(key, exp, value, persist, replicate);
   }
 
   @Override
   public OperationFuture<Boolean> set(String key, Object value, PersistTo persist, ReplicateTo replicate) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().set(key, value, persist, replicate);
   }
 
   @Override
@@ -638,81 +638,81 @@ abstract class CouchbaseClientProxy extends SpyObject implements CouchbaseClient
 
   @Override
   public Future<Long> asyncIncr(String key, long by) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().asyncIncr(key, by);
   }
 
   @Override
   public Future<Long> asyncIncr(String key, int by) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().asyncIncr(key, by);
   }
 
   @Override
   public Future<Long> asyncDecr(String key, long by) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().asyncDecr(key, by);
   }
 
   @Override
   public Future<Long> asyncDecr(String key, int by) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().asyncDecr(key, by);
   }
 
   @Override
   public long incr(String key, long by, long def) {
-    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().incr(key, by, def);
   }
 
   @Override
   public long incr(String key, int by, long def) {
-    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().incr(key, by, def);
   }
 
   @Override
   public long decr(String key, long by, long def) {
-    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().decr(key, by, def);
   }
 
   @Override
   public long decr(String key, int by, long def) {
-    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().decr(key, by, def);
   }
 
   @Override
   public Future<Boolean> delete(String key) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().delete(key);
   }
 
   @Override
   public Future<Boolean> delete(String key, long cas) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().delete(key, cas);
   }
 
   @Override
   public Future<Boolean> flush(int delay) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().flush(delay);
   }
 
   @Override
   public Future<Boolean> flush() {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().flush();
   }
 
   @Override
   public boolean waitForQueues(long timeout, TimeUnit unit) {
-    return false;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().waitForQueues(timeout, unit);
   }
 
   @Override
   public boolean addObserver(ConnectionObserver obs) {
-    return false;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().addObserver(obs);
   }
 
   @Override
   public boolean removeObserver(ConnectionObserver obs) {
-    return false;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().removeObserver(obs);
   }
 
   @Override
   public Set<String> listSaslMechanisms() {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getCouchbaseClient().listSaslMechanisms();
   }
 }

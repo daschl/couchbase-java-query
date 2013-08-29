@@ -34,13 +34,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created with IntelliJ IDEA.
- * User: michael
- * Date: 8/29/13
- * Time: 11:20 AM
- * To change this template use File | Settings | File Templates.
- */
 public class CouchbaseQueryClientIntegrationTest {
 
   List<String> nodes = new ArrayList<String>();
