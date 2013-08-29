@@ -45,7 +45,7 @@ public class QueryConnectionIntegrationTest {
   @Test
   public void benchmarkOneThreadSyncPerformance() throws Exception {
     QueryConnection connection = new QueryConnection(nodes);
-    final int iterations = 1000;
+    final int iterations = 100;
     final long start = System.nanoTime();
     for (int i = 0; i < iterations; i++) {
       HttpFuture<QueryResult> future = connection.execute("SELECT * FROM beer-sample LIMIT 3");

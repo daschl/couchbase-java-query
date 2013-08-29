@@ -48,10 +48,27 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
     this(Arrays.asList("127.0.0.1"), "default", "");
   }
 
+  /**
+   * Create a new {@link CouchbaseQueryClient}.
+   *
+   * The node list used here will be used for both the Query Engine and Couchbase Server.
+   *
+   * @param nodes list of nodes to bootstrap.
+   * @param bucket the bucket name.
+   * @param password the bucket password.
+   */
   public CouchbaseQueryClient(List<String> nodes, String bucket, String password) {
     this(nodes, nodes, bucket, password);
   }
 
+  /**
+   * Create a new {@link CouchbaseQueryClient}.
+   *
+   * @param couchbaseNodes nodes of the couchbase cluster.
+   * @param queryNodes nodes of the query engine.
+   * @param bucket bucket name.
+   * @param password bucket password.
+   */
   public CouchbaseQueryClient(List<String> couchbaseNodes, List<String> queryNodes, String bucket, String password) {
     List<URI> parsedNodes = parseCouchbaseNodes(couchbaseNodes);
 

@@ -72,7 +72,7 @@ public final class QueryResult {
     return error != null;
   }
 
-  public QueryError getCause() {
+  public QueryError getError() {
     return error;
   }
 

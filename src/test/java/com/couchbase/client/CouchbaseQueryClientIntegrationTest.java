@@ -69,8 +69,8 @@ public class CouchbaseQueryClientIntegrationTest {
     QueryResult query = client.query("SELECT * FROM beer-sample LIMI 1");
 
     assertFalse(query.isSuccess());
-    assertEquals(4100, query.getCause().getCode());
-    assertEquals("Parse Error", query.getCause().getMessage());
+    assertEquals(4100, query.getError().getCode());
+    assertEquals("Parse Error", query.getError().getMessage());
 
     client.shutdown();
   }
