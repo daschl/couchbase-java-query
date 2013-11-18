@@ -60,9 +60,13 @@ public class QueryConnection extends SpyObject {
    */
   List<Channel> connectedChannels = new ArrayList<Channel>();
 
+
+  private final CouchbaseConnectionFactory connectionFactory;
+
   EventLoopGroup group = new NioEventLoopGroup();
 
-  public QueryConnection(List<String> nodes) {
+  public QueryConnection(List<String> nodes, CouchbaseConnectionFactory cf) {
+    connectionFactory = cf;
 
     Class<? extends SocketChannel> channel = NioSocketChannel.class;
     Bootstrap bootstrap = new Bootstrap()
@@ -106,7 +110,8 @@ public class QueryConnection extends SpyObject {
 
 
     CountDownLatch futureLatch = new CountDownLatch(1);
-    HttpFuture<QueryResult> future = new HttpFuture<QueryResult>(futureLatch, 10000);
+    HttpFuture<QueryResult> future = new HttpFuture<QueryResult>(futureLatch, 10000,
+            connectionFactory.getListenerExecutorService());
 
     ChannelFuture channelFuture = chan.writeAndFlush(new QueryEvent<QueryResult>(query, future, futureLatch));
 

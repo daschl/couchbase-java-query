@@ -24,12 +24,16 @@ package com.couchbase.client;
 
 import com.couchbase.client.internal.HttpFuture;
 import com.couchbase.client.mapping.QueryResult;
+import net.spy.memcached.CASResponse;
+import net.spy.memcached.PersistTo;
+import net.spy.memcached.ReplicateTo;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class CouchbaseQueryClient extends CouchbaseClientProxy {
@@ -73,14 +77,17 @@ public class CouchbaseQueryClient extends CouchbaseClientProxy {
   public CouchbaseQueryClient(List<String> couchbaseNodes, List<String> queryNodes, String bucket, String password) {
     List<URI> parsedNodes = parseCouchbaseNodes(couchbaseNodes);
 
+    CouchbaseConnectionFactory factory = null;
     try {
-      couchbaseClient = new CouchbaseClient(parsedNodes, bucket, password);
+      CouchbaseConnectionFactoryBuilder builder = new CouchbaseConnectionFactoryBuilder();
+      factory = builder.buildCouchbaseConnection(parsedNodes, bucket, password);
+      couchbaseClient = new CouchbaseClient(factory);
     } catch (Exception ex) {
       throw new BootstrapException("Could not bootstrap the CouchbaseClient: " + ex);
     }
 
     try {
-    queryConnection = new QueryConnection(queryNodes);
+    queryConnection = new QueryConnection(queryNodes, factory);
     } catch (Exception ex) {
       throw new BootstrapException("Could not bootstrap the QueryClient: " + ex);
     }

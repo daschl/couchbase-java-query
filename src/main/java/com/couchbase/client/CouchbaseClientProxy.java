@@ -715,4 +715,29 @@ abstract class CouchbaseClientProxy extends SpyObject implements CouchbaseClient
   public Set<String> listSaslMechanisms() {
     return getCouchbaseClient().listSaslMechanisms();
   }
+
+    @Override
+    public CASResponse cas(String key, long cas, int exp, Object value, PersistTo req, ReplicateTo rep) {
+        return getCouchbaseClient().cas(key, cas, exp, value, req, rep);
+    }
+
+    @Override
+    public CASResponse cas(String key, long cas, int exp, Object value, PersistTo req) {
+        return getCouchbaseClient().cas(key, cas, exp, value, req);
+    }
+
+    @Override
+    public CASResponse cas(String key, long cas, int exp, Object value, ReplicateTo rep) {
+        return getCouchbaseClient().cas(key, cas, exp, value, rep);
+    }
+
+    @Override
+    public Future<CASResponse> asyncCAS(String key, long casId, int exp, Object value) {
+        return getCouchbaseClient().asyncCAS(key, casId, exp, value);
+    }
+
+    @Override
+    public CASResponse cas(String key, long casId, int exp, Object value) {
+        return getCouchbaseClient().cas(key, casId, exp, value);
+    }
 }
